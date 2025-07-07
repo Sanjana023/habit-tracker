@@ -12,22 +12,17 @@ import {
 } from '@mui/material';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
- 
+
 type Props = {
   toggleTheme: () => void;
   mode: 'light' | 'dark';
 };
 
-
-
 function App({ toggleTheme, mode }: Props) {
   return (
     <Box>
       <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" fontWeight={600}>
-            Habit Tracker
-          </Typography>
+        <Toolbar sx={{ justifyContent: 'flex-end' }}>
           <IconButton onClick={toggleTheme} color="inherit">
             {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
