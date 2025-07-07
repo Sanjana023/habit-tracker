@@ -1,1 +1,5 @@
- 
+body {
+  background-color: #f9fafb;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}

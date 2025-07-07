@@ -1,11 +1,19 @@
 import { useHabitStore, type Habit } from '../store/store';
-import { Box, Button, LinearProgress, Paper, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  LinearProgress,
+  Paper,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const HabitList = () => {
   const { habits, removeHabit, toggleHabit } = useHabitStore();
   const today = new Date().toISOString().split('T')[0];
+  const theme = useTheme();
 
   const getStreak = (habit: Habit) => {
     let streak = 0;
@@ -22,64 +30,105 @@ const HabitList = () => {
     return streak;
   };
 
+  if (habits.length === 0) {
+    return (
+      <Typography
+        variant="body1"
+        color="text.secondary"
+        textAlign="center"
+        mt={4}
+      >
+        No habits added yet. Start by creating one!
+      </Typography>
+    );
+  }
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4 }}>
-      {habits.map((habit) => (
-        <Paper key={habit.id} elevation={2} sx={{ p: 2 }}>
-          <Box
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 4 }}>
+      {habits.map((habit) => {
+        const streak = getStreak(habit);
+        const progressValue = Math.min((streak / 30) * 100, 100); // cap at 100%
+
+        return (
+          <Paper
+            key={habit.id}
+            elevation={3}
             sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: { sm: 'center' },
-              justifyContent: 'space-between',
-              gap: 2,
+              p: { xs: 2, sm: 3 },
+              borderRadius: 3,
+              backgroundColor: theme.palette.background.paper,
             }}
           >
-            <Box>
-              <Typography variant="h6">{habit.name}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {habit.frequency.charAt(0).toUpperCase() +
-                  habit.frequency.slice(1)}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { sm: 'center' },
+                justifyContent: 'space-between',
+                gap: 2,
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, textTransform: 'capitalize' }}
+                >
+                  {habit.name}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ textTransform: 'capitalize' }}
+                >
+                  {habit.frequency}
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: { xs: 1, sm: 0 } }}
+              >
+                <Button
+                  variant={habit.completedDates.includes(today) ? 'contained' : 'outlined'}
+                  color={habit.completedDates.includes(today) ? 'success' : 'primary'}
+                  onClick={() => toggleHabit(habit.id, today)}
+                  startIcon={<CheckCircleIcon />}
+                >
+                  {habit.completedDates.includes(today)
+                    ? 'Completed'
+                    : 'Mark Complete'}
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => removeHabit(habit.id)}
+                  startIcon={<DeleteIcon />}
+                >
+                  Remove
+                </Button>
+              </Box>
+            </Box>
+
+            {/* Progress bar section */}
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body2" gutterBottom>
+                Current Streak: <strong>{streak}</strong> day{streak !== 1 ? 's' : ''}
               </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={progressValue}
+                sx={{
+                  height: 10,
+                  borderRadius: 5,
+                  backgroundColor: theme.palette.grey[300],
+                  '& .MuiLinearProgress-bar': {
+                    borderRadius: 5,
+                  },
+                }}
+              />
             </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-              <Button
-                variant="outlined"
-                color={
-                  habit.completedDates.includes(today) ? 'success' : 'primary'
-                }
-                onClick={() => toggleHabit(habit.id, today)}
-                startIcon={<CheckCircleIcon />}
-              >
-                {habit.completedDates.includes(today)
-                  ? 'Completed'
-                  : 'Mark Complete'}
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => removeHabit(habit.id)}
-                startIcon={<DeleteIcon />}
-              >
-                Remove
-              </Button>
-            </Box>
-          </Box>
-
-          {/* Progress bar section */}
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="body2">
-              Current Streak: {getStreak(habit)}
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={(getStreak(habit) / 30) * 100}
-              sx={{ mt: 1 }}
-            />
-          </Box>
-        </Paper>
-      ))}
+          </Paper>
+        );
+      })}
     </Box>
   );
 };
