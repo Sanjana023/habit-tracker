@@ -1,0 +1,23 @@
+import { useHabitStore } from './store/store';
+import AddHabitForm from './components/add-habit-form';
+import HabitList from './components/habit-list';
+import { Box, Container, Typography } from '@mui/material';
+ 
+function App() {
+ const store = useHabitStore();
+ console.log(store);
+  return (
+    <Container>
+      <Box>
+        <Typography variant="h2" component="h1" gutterBottom align="center">
+          Habit Tracker App
+        </Typography>
+        <AddHabitForm />
+        {/*list*/}
+        <HabitList />
+      </Box>
+    </Container>
+  );
+}
+
+export default App;
