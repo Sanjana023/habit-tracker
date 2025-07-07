@@ -4,6 +4,7 @@ import {
   Button,
   LinearProgress,
   Paper,
+  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -85,11 +86,22 @@ const HabitList = () => {
               </Box>
 
               <Box
-                sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: { xs: 1, sm: 0 } }}
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 1,
+                  mt: { xs: 1, sm: 0 },
+                }}
               >
                 <Button
-                  variant={habit.completedDates.includes(today) ? 'contained' : 'outlined'}
-                  color={habit.completedDates.includes(today) ? 'success' : 'primary'}
+                  variant={
+                    habit.completedDates.includes(today)
+                      ? 'contained'
+                      : 'outlined'
+                  }
+                  color={
+                    habit.completedDates.includes(today) ? 'success' : 'primary'
+                  }
                   onClick={() => toggleHabit(habit.id, today)}
                   startIcon={<CheckCircleIcon />}
                 >
@@ -111,20 +123,27 @@ const HabitList = () => {
             {/* Progress bar section */}
             <Box sx={{ mt: 2 }}>
               <Typography variant="body2" gutterBottom>
-                Current Streak: <strong>{streak}</strong> day{streak !== 1 ? 's' : ''}
+                Current Streak: <strong>{streak}</strong> day
+                {streak !== 1 ? 's' : ''}
               </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={progressValue}
-                sx={{
-                  height: 10,
-                  borderRadius: 5,
-                  backgroundColor: theme.palette.grey[300],
-                  '& .MuiLinearProgress-bar': {
+
+              <Tooltip title={`${streak}/30 days`} arrow>
+                <LinearProgress
+                  variant="determinate"
+                  value={progressValue}
+                  sx={{
+                    height: 10,
                     borderRadius: 5,
-                  },
-                }}
-              />
+                    backgroundColor:
+                      theme.palette.mode === 'dark'
+                        ? '#333'
+                        : theme.palette.grey[300],
+                    '& .MuiLinearProgress-bar': {
+                      borderRadius: 5,
+                    },
+                  }}
+                />
+              </Tooltip>
             </Box>
           </Paper>
         );

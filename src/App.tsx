@@ -1,41 +1,55 @@
 import { useHabitStore } from './store/store';
 import AddHabitForm from './components/add-habit-form';
 import HabitList from './components/habit-list';
-import { Box, Container, Divider, Paper, Typography } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Container,
+  IconButton,
+  Toolbar,
+  Typography,
+  Paper,
+} from '@mui/material';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
  
-function App() {
- const store = useHabitStore();
- console.log(store);
+type Props = {
+  toggleTheme: () => void;
+  mode: 'light' | 'dark';
+};
+
+
+
+function App({ toggleTheme, mode }: Props) {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 }, borderRadius: 3 }}>
-        <Box textAlign="center" mb={4}>
-          <Typography
-            variant="h3"
-            component="h1"
-            gutterBottom
-            sx={{
-              fontWeight: 600,
-              fontSize: { xs: '2rem', sm: '3rem' },
-              color: 'primary.main',
-            }}
-          >
-            🧠 Habit Tracker
+    <Box>
+      <AppBar position="static" color="transparent" elevation={0}>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <Typography variant="h6" fontWeight={600}>
+            Habit Tracker
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Build healthy habits and track your progress daily.
-          </Typography>
-        </Box>
+          <IconButton onClick={toggleTheme} color="inherit">
+            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-        <Box mb={3}>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Paper elevation={3} sx={{ p: { xs: 2, sm: 4 }, borderRadius: 3 }}>
+          <Box textAlign="center" mb={4}>
+            <Typography variant="h4" fontWeight={600} gutterBottom>
+              🧠 Habit Tracker
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Build healthy habits and track your progress daily.
+            </Typography>
+          </Box>
+
           <AddHabitForm />
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        <HabitList />
-      </Paper>
-    </Container>
+          <HabitList />
+        </Paper>
+      </Container>
+    </Box>
   );
 }
 
