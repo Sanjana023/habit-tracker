@@ -4,14 +4,14 @@ import { devtools, persist } from 'zustand/middleware';
 export interface Habit {
   id: string;
   name: string;
-  frequency: 'daily' | 'weekly';
+  frequency: 'daily' | 'weekly' | 'monthly';
   completedDates: string[];
   createdAt: string;
 }
 
 interface HabitState {
   habits: Habit[];
-  addHabit: (name: string, frequency: 'daily' | 'weekly') => void;
+  addHabit: (name: string, frequency: 'daily' | 'weekly' | 'monthly') => void;
   removeHabit: (id: string) => void;
   toggleHabit: (id: string, date: string) => void;
   isLoading: boolean;
