@@ -1,5 +1,6 @@
 import AddHabitForm from './components/add-habit-form';
 import HabitList from './components/habit-list';
+import Stats from './components/Stats';
 import {
   AppBar,
   Box,
@@ -41,6 +42,7 @@ function App({ toggleTheme, mode }: Props) {
 
           <AddHabitForm />
           <HabitList />
+          <Stats />
         </Paper>
       </Container>
     </Box>
