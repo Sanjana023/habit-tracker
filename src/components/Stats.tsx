@@ -23,10 +23,9 @@ const Stats = () => {
     totalPossible += Math.floor(daysSinceCreated) + 1;
   });
 
-  const successRate =
-    totalPossible > 0
-      ? Math.round((totalCompleted / totalPossible) * 100)
-      : 0;
+  const rawRate =
+    totalPossible === 0 ? 0 : (totalCompleted / totalPossible) * 100;
+  const successRate = Math.min(Math.round(rawRate), 100);
 
   return (
     <Box mt={6}>
