@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { ThemeProvider, CssBaseline, createTheme } from '@mui/material';
 import App from './App.tsx';
 import './index.css';
+import { BrowserRouter } from 'react-router-dom';
 
 const Main = () => {
   // Load theme from localStorage or default to dark
@@ -47,6 +48,8 @@ const Main = () => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <BrowserRouter>
     <Main />
+    </BrowserRouter>
   </StrictMode>
 );
