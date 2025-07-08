@@ -12,20 +12,32 @@ const Stats = () => {
   ).length;
 
   let totalCompleted = 0;
-  let totalPossible = 0;
+  let totalExpected = 0;
 
   habits.forEach((habit) => {
     totalCompleted += habit.completedDates.length;
 
     const createdAt = new Date(habit.createdAt);
-    const daysSinceCreated =
-      (new Date().getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24);
-    totalPossible += Math.floor(daysSinceCreated) + 1;
+    const now = new Date();
+    const diffTime = now.getTime() - createdAt.getTime();
+    const daysSinceCreated = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    let expected = 0;
+    if (habit.frequency === 'daily') {
+      expected = daysSinceCreated;
+    } else if (habit.frequency === 'weekly') {
+      expected = Math.ceil(daysSinceCreated / 7);
+    } else if (habit.frequency === 'monthly') {
+      expected = Math.ceil(daysSinceCreated / 30);
+    }
+
+    totalExpected += expected;
   });
 
-  const rawRate =
-    totalPossible === 0 ? 0 : (totalCompleted / totalPossible) * 100;
-  const successRate = Math.min(Math.round(rawRate), 100);
+  const successRate =
+    totalExpected === 0
+      ? 0
+      : Math.min(Math.round((totalCompleted / totalExpected) * 100), 100);
 
   return (
     <Box mt={6}>
